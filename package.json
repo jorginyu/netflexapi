@@ -1,0 +1,35 @@
+{
+    "name": "netflexapi",
+    "version": "1.0.0",
+    "description": "Api for Netflex web app",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon index"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jorginyu/netflexapi.git"
+    },
+    "keywords": [
+        "api",
+        "backend",
+        "node",
+        "movies"
+    ],
+    "author": "Jorge Sánchez Águila",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/jorginyu/netflexapi/issues"
+    },
+    "homepage": "https://github.com/jorginyu/netflexapi#readme",
+    "dependencies": {
+        "bcrypt": "^3.0.6",
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "morgan": "^1.9.1",
+        "mysql2": "^1.7.0",
+        "nodemon": "^1.19.2",
+        "sequelize": "^5.19.1"
+    }
+}
