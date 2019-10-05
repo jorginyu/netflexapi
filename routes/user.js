@@ -7,6 +7,7 @@ const modelo = require('../models/index');
 router.post('/registro', (req, res) => {
      console.log('registrando...');
      let body = req.body;
+     console.log(body);
      const hash = bcrypt.hashSync(body.passwd, 10);
      body.passwd = hash;
 
@@ -16,7 +17,7 @@ router.post('/registro', (req, res) => {
                     console.log('Usuario creado!');
                     return modelo.User.create(body);
                } else {
-                    console.log('Usuario ya existe!');
+                    throw 'Usuario ya existe!';
                }
           })
           .then(user => {
@@ -34,7 +35,7 @@ router.post('/registro', (req, res) => {
                //devolvemos un nuevo objeto "token" al siguiente then, que incluye id y nombre de usuario
                return modelo.Token.create({
                     token,
-                    username: user.dataValues.username
+                    user: user.dataValues.username
                });
           })      
           .then(token => res.json({ ok: true, data: token })) //enviamos respuesta con el token completo en json
@@ -43,9 +44,9 @@ router.post('/registro', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-     const { email, password } = req.body;
-     console.log(password);
-     if (password === '' || email === '') {
+     const { email, passwd } = req.body;
+     console.log(passwd);
+     if (passwd === '' || email === '') {
        res.send('<h1>Error... </h1>');
      }
    
@@ -54,7 +55,7 @@ router.post('/login', (req, res) => {
      })
        .then(user => {
          //comparamos el password recibido con el password del usuario guardado en bdd, ambos encriptados
-         if (bcrypt.compareSync(password, user.password)) {
+         if (bcrypt.compareSync(passwd, user.passwd)) {
            //si ok, devolvemos usuario a siguiente "then"
            return user;
          } else {
@@ -75,15 +76,14 @@ router.post('/login', (req, res) => {
            );
          }
          //devolvemos un nuevo objeto "token" al siguiente then, que incluye id y nombre de usuario
-         return Token.create({
-           token,
-           user: user
+         return modelo.Token.create({
+          token,
+          username: user.dataValues.username
          });
        })
        .then(token => console.log(token))
        .then(token => res.json({ ok: true, data: token })) //enviamos respuesta con el token completo en json
        .catch(error => res.json({ ok: false, error: error }));
 });
-
 
 module.exports = router;
